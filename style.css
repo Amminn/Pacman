@@ -1,0 +1,20 @@
+html, body {
+    padding: 2px;
+    margin: 2px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(15px, 1fr));
+    width: 420px;
+    height: 420px;
+    border: solid black;
+}
+
+.grid div {
+    width: 15px;
+    height: 15px;
+    background-color: blue;
+    outline: 1px solid black;
+}
