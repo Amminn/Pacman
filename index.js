@@ -5,7 +5,6 @@ let haha = document.getElementById('haha')
 let squares = []
 var score = 0
 
-
 const layout = [
     1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
     1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -68,7 +67,6 @@ createBoard()
 // 476 419
 //starting position of pacman 
 
-
 // width containe 28 div 
 // height containe 28 div 
 // full containes 784
@@ -116,11 +114,10 @@ function control(e) {
         }
         break
     }
-    console.log(pacmanCurrentIndex)
     pacDotEaten()
+    powerPelletEaten()
     squares[pacmanCurrentIndex].classList.add('pacman')
 }
-
 
 function pacDotEaten() {
     if (squares[pacmanCurrentIndex].classList.contains('pac-dot')){
@@ -130,11 +127,30 @@ function pacDotEaten() {
         scoreDisplay.innerHTML = score
     }
 }
+
+function powerPelletEaten() {
+    //if square pacman is in contains a power pellet
+    if (squares[pacmanCurrentIndex].classList.contains('power-pellet')) {
+        squares[pacmanCurrentIndex].classList.remove('power-pellet')
+        score = score + 10
+        // for (ghosts.forEach(ghost => ))
+        console.log('they are scared')
+        ghosts.forEach(ghost => ghost.isScared = true)
+        setTimeout(FetchData, 8000);
+    }
+    //add a score of 10
+    
+    //change each of the four ghosts to isScared
+}
+
+function notScared() {
+    ghosts.forEach(ghost => ghost.isScared = false)
+}
+
 document.addEventListener('keyup', control)
 
-
 class Ghost {
-    constructor(className,startIndex, speed){
+    constructor(className, startIndex, speed){
         this.className = className
         this.startIndex = startIndex
         this.speed = speed
@@ -151,7 +167,6 @@ ghosts = [
     new Ghost('clyde', 379, 100)
 ]
 
-
 //draw my ghosts onto my grid
 ghosts.forEach(ghost => {
     squares[ghost.startIndex].classList.add(ghost.className)
@@ -162,10 +177,8 @@ ghosts.forEach(ghost => {
 ghosts.forEach(ghost => moveGhost(ghost)) 
 
 function moveGhost(ghost) {
-    console.log('moved ghost')
     const directions = [-1, +1, -width, +width]
     let direction = directions[Math.floor(Math.random() * directions.length)]
-    console.log(direction)
     
     ghost.timerId = setInterval(function() {
         //all our code
@@ -182,8 +195,6 @@ function moveGhost(ghost) {
             squares[ghost.currentIndex].classList.add(ghost.className)
             squares[ghost.currentIndex].classList.add('ghost')
         } else 
-            direction = directions[Math.floor(Math.random() * directions.length)]
-        
+            direction = directions[Math.floor(Math.random() * directions.length)]  
     }, ghost.speed )
-    
 }
