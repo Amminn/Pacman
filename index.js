@@ -79,7 +79,7 @@ createBoard()
 // to move left 490 - 1  490 % 28 !== 0  if it 0 it means we hit the wall m
 // to mive right 490 + 1  490 % 28 < 28 - 1 it has to be less than 27 or we will hit the wall
 // move down 490 + 28 as long as 490 + 24 < 24 * 24 which means 363
-let pacmanCurrentIndex = 391
+let pacmanCurrentIndex = 200
 squares[pacmanCurrentIndex].classList.add('pacman')
 
 function control(e) {
@@ -136,7 +136,7 @@ function powerPelletEaten() {
         // for (ghosts.forEach(ghost => ))
         console.log('they are scared')
         ghosts.forEach(ghost => ghost.isScared = true)
-        setTimeout(FetchData, 8000);
+        setTimeout(notScared, 8000);
     }
     //add a score of 10
     
@@ -161,9 +161,9 @@ class Ghost {
 }
 
 ghosts = [
-    new Ghost('blinky', 348, 100),
-    new Ghost('pinky', 376, 100),
-    new Ghost('inky', 351, 100),
+    new Ghost('blinky', 348, 300),
+    new Ghost('pinky', 376, 400),
+    new Ghost('inky', 351, 500),
     new Ghost('clyde', 379, 100)
 ]
 
@@ -188,7 +188,7 @@ function moveGhost(ghost) {
         ) {
             //remove any ghost
             squares[ghost.currentIndex].classList.remove(ghost.className)
-            squares[ghost.currentIndex].classList.remove('ghost')
+            squares[ghost.currentIndex].classList.remove('ghost', 'ghost-scarred')
             // //add direction to current Index
             ghost.currentIndex += direction
             // //add ghost class
@@ -196,5 +196,9 @@ function moveGhost(ghost) {
             squares[ghost.currentIndex].classList.add('ghost')
         } else 
             direction = directions[Math.floor(Math.random() * directions.length)]  
+        if (ghost.isScared) {
+            squares[ghost.currentIndex].classList.add('ghost-scarred')
+        }    
+        
     }, ghost.speed )
 }
