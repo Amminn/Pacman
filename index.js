@@ -2,6 +2,8 @@ const width = 28
 const grid = document.querySelector('.grid')
 let scoreDisplay = document.getElementById('score')
 let haha = document.getElementById('haha')
+let loseScore = document.getElementById('game-score')
+let winScore = document.getElementById('win-score')
 let squares = []
 var score = 0
 
@@ -79,7 +81,7 @@ createBoard()
 // to move left 490 - 1  490 % 28 !== 0  if it 0 it means we hit the wall m
 // to mive right 490 + 1  490 % 28 < 28 - 1 it has to be less than 27 or we will hit the wall
 // move down 490 + 28 as long as 490 + 24 < 24 * 24 which means 363
-let pacmanCurrentIndex = 200
+let pacmanCurrentIndex = 492
 squares[pacmanCurrentIndex].classList.add('pacman')
 
 function control(e) {
@@ -114,16 +116,18 @@ function control(e) {
         }
         break
     }
+    squares[pacmanCurrentIndex].classList.add('pacman')
     pacDotEaten()
     powerPelletEaten()
-    squares[pacmanCurrentIndex].classList.add('pacman')
+    checkForWin()
+    checkForGameOver()
 }
 
 function pacDotEaten() {
     if (squares[pacmanCurrentIndex].classList.contains('pac-dot')){
         squares[pacmanCurrentIndex].classList.remove('pac-dot')
         score++
-        console.log(score)
+        // console.log(score)
         scoreDisplay.innerHTML = score
     }
 }
@@ -161,10 +165,11 @@ class Ghost {
 }
 
 ghosts = [
-    new Ghost('blinky', 348, 300),
+    new Ghost('blinky', 348, 100),
+    new Ghost('blinky', 348, 100),
     new Ghost('pinky', 376, 400),
     new Ghost('inky', 351, 500),
-    new Ghost('clyde', 379, 100)
+    new Ghost('clyde', 379, 300)
 ]
 
 //draw my ghosts onto my grid
@@ -198,7 +203,58 @@ function moveGhost(ghost) {
             direction = directions[Math.floor(Math.random() * directions.length)]  
         if (ghost.isScared) {
             squares[ghost.currentIndex].classList.add('ghost-scarred')
-        }    
+        }
+
+        if (ghost.isScared === true && squares[ghost.currentIndex].classList.contains('pacman')) {
+            squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'ghost-scarred')
+            ghost.currentIndex = ghost.startIndex
+            squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
+            score = score + 100
+        }
+
+        //if the ghost is current scared AND pacman is on it
         
+        //remove classnames - ghost.className, 'ghost', 'scared-ghost'
+        
+        // change ghosts currentIndex back to its startIndex
+        
+        //add a score of 100
+        
+        //re-add classnames of ghost.className and 'ghost' to the ghosts new postion
+        checkForGameOver()
     }, ghost.speed )
 }
+
+function checkForGameOver() {
+    //if the square pacman is in contains a ghost AND the square does NOT contain a scared ghost 
+    if (squares[pacmanCurrentIndex].classList.contains('ghost') && 
+        !squares[pacmanCurrentIndex].classList.contains('scared-ghost')) {
+            // console.log('dead')
+            ghosts.forEach(ghost => clearInterval(ghost.timerId)) 
+            document.removeEventListener('keyup', control);
+            document.body.classList.add("bad");
+            loseScore.innerHTML = score
+    }
+}
+
+function checkForWin() {
+    if (score === 400) {
+        ghosts.forEach(ghost => clearInterval(ghost.timerId)) 
+        document.removeEventListener('keyup', control);
+        document.body.classList.add("good");
+        winScore.innerHTML = score
+    }
+}
+    //for each ghost - we need to stop it moving
+    
+    //remove eventlistener from our control function
+    
+    //tell user the game is over
+
+// after i eat the power pallet the ghosts are getting scared now 
+// when the ghosts are not scared they should have the ability to eat me
+// after i get the power pallet beside they should get scarred im suppose to be able to eat them
+// when i do eat them the they have to respond the thier base
+// every 20s the ghosts get faster 20%
+
+
